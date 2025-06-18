@@ -1,16 +1,9 @@
-// src/components/Aprendiz.jsx
 import React, { useState } from 'react';
-import ModalDetalles from './ModalDetalles'; // Modal para ver detalles
+import ModalDetalles from './ModalDetalles';
 import certificadoImg from '../img/certificado.webp';
-
-
-
-
-
 
 const Aprendiz = ({ aprendiz }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [message, setMessage] = useState('');
 
   const handleVerDetalles = () => {
     setModalOpen(true);
@@ -21,18 +14,16 @@ const Aprendiz = ({ aprendiz }) => {
   };
 
   const handleGenerar = () => {
-    setMessage('Debe acercarse a bienestar para poder descargar el certificado.');
+    
   };
 
   return (
     <div className="aprendiz-card">
       <div className="aprendiz-info">
-     
-      
-
-      <img
+        <img
           className="certificado-img"
-          src={certificadoImg} alt="Certificado"
+          src={certificadoImg}
+          alt="Certificado"
         />
 
         <div className="info-text">
@@ -47,8 +38,6 @@ const Aprendiz = ({ aprendiz }) => {
         <button onClick={handleGenerar}>Generar</button>
       </div>
 
-      {message && <div className="message">{message}</div>}
-
       {modalOpen && (
         <ModalDetalles
           aprendiz={aprendiz}
@@ -58,17 +47,5 @@ const Aprendiz = ({ aprendiz }) => {
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 export default Aprendiz;
