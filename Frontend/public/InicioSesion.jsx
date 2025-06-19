@@ -1,127 +1,123 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './styles/inicio.css'; // ✅ Correcto (desde /src)
+"use client"
 
-import api from '../src/services/api';
+import React, { useState } from "react"
+import "./styles/inicio.css"
 
-const InicioSesion = () => {
-  const [correo, setCorreo] = useState('');
-  const [contrasena, setContrasena] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const [tipoMensaje, setTipoMensaje] = useState('');
-  const [esOlvidoContraseña, setEsOlvidoContraseña] = useState(false);
 
-  const navigate = useNavigate();
+// Iconos SVG
+const IconoMail = () => (
+  <svg className="icono-input-inicio" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+    />
+  </svg>
+)
 
-  const manejarClickOlvidoContraseña = () => {
-    setEsOlvidoContraseña(!esOlvidoContraseña);
-  };
+const IconoCandado = () => (
+  <svg className="icono-input-inicio" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+    />
+  </svg>
+)
 
-  const manejarInicioSesion = async (e) => {
-    e.preventDefault();
+export default function InicioSesion({ alEnviar }) {
+  const [datosFormulario, setDatosFormulario] = useState({
+    correo: "",
+    contrasena: "",
+    recordarme: false,
+  })
+  const [cargando, setCargando] = useState(false)
+
+  const manejarCambio = (evento) => {
+    const { name, value, type, checked } = evento.target
+    setDatosFormulario((anterior) => ({
+      ...anterior,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  const manejarEnvio = async (evento) => {
+    evento.preventDefault()
+    setCargando(true)
 
     try {
-      const response = await api.post('/usuario/login', {
-        Correo: correo,
-        Contrasena: contrasena,
-      });
-
-      const { token, usuario } = response.data;
-
-      console.log("🧠 Datos recibidos del backend:", response.data);
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("IdUsuario", usuario.IdUsuario);
-
-      setMensaje('✅ Inicio de sesión exitoso');
-      setTipoMensaje('exito');
-
-      navigate('/dashap');
+      if (alEnviar) {
+        await alEnviar(datosFormulario)
+      }
+      console.log("Datos de inicio de sesión:", datosFormulario)
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      setMensaje('❌ Usuario o contraseña incorrectos');
-      setTipoMensaje('error');
+      console.error("Error al iniciar sesión:", error)
+    } finally {
+      setCargando(false)
     }
-  };
+  }
 
   return (
-    <div className="contenedorUnico" id="body-inicio-sesion">
-      <div className="logoUnico">
-        <br />
-      
-   
-      </div>
-
-      <br /><br />
-      <h2 className="tituloUnico activsena-texto">Bienvenido a ActivSena</h2>
-
-      <form className="formularioUnico" onSubmit={manejarInicioSesion}>
-        <div className="usuarioUnico">
+    <form className="formulario-inicio-sesion" onSubmit={manejarEnvio}>
+      <div className="grupo-campo-inicio">
+        <label htmlFor="correo-inicio" className="etiqueta-inicio etiqueta-inicio-desktop">
+          Correo Electrónico
+        </label>
+        <div className="contenedor-input-inicio">
+          <IconoMail />
           <input
+            id="correo-inicio"
+            name="correo"
             type="email"
-            id="usuarioUnico"
-            className="campoInputUnico"
+            placeholder="tu@email.com"
+            className="campo-input-inicio"
+            value={datosFormulario.correo}
+            onChange={manejarCambio}
             required
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
           />
-          <label htmlFor="usuarioUnico" className="labelInputUnico">
-            Correo
-          </label>
         </div>
-
-        <div className="usuarioUnico">
-          <input
-            type="password"
-            id="passwordUnico"
-            className="campoInputUnico"
-            required
-            value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
-          />
-          <label htmlFor="passwordUnico" className="labelInputUnico">
-            Contraseña
-          </label>
-        </div>
-
-        <div className="olvidoContrasenaUnico">
-          <button
-            type="button"
-            className="btnLoginUnico"
-            onClick={manejarClickOlvidoContraseña}
-          >
-            <span></span><span></span><span></span><span></span>
-            {esOlvidoContraseña ? 'Regresar al inicio de sesión' : 'Olvidé mi contraseña'}
-          </button>
-        </div>
-
-        <button type="submit" className="btnLoginUnicor">
-          <span></span><span></span><span></span><span></span>
-          Iniciar sesión
-        </button>
-      </form>
-
-      {mensaje && (
-        <p
-          className={tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'}
-          style={{ textAlign: 'center', marginTop: '1rem' }}
-        >
-          {mensaje}
-        </p>
-      )}
-
-      <br />
-
-      <div className="registroUnico">
-        <p className="textoRegistroUnico">
-          ¿No tienes cuenta?{' '}
-          <a href="/registro" className="enlaceRegistroUnico">
-            Regístrate aquí
-          </a>
-        </p>
       </div>
-    </div>
-  );
-};
 
-export default InicioSesion;
+      <div className="grupo-campo-inicio">
+        <label htmlFor="contrasena-inicio" className="etiqueta-inicio etiqueta-inicio-desktop">
+          Contraseña
+        </label>
+        <div className="contenedor-input-inicio">
+          <IconoCandado />
+          <input
+            id="contrasena-inicio"
+            name="contrasena"
+            type="password"
+            placeholder="••••••••"
+            className="campo-input-inicio"
+            value={datosFormulario.contrasena}
+            onChange={manejarCambio}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="contenedor-opciones-inicio contenedor-opciones-inicio-desktop">
+        <label className="etiqueta-checkbox-inicio">
+          <input
+            type="checkbox"
+            name="recordarme"
+            className="checkbox-inicio"
+            checked={datosFormulario.recordarme}
+            onChange={manejarCambio}
+          />
+          <span className="texto-checkbox-inicio">Recordarme</span>
+        </label>
+        <a href="#" className="enlace-recuperar-inicio">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
+
+      <button type="submit" className="boton-inicio-sesion" disabled={cargando}>
+        {cargando ? "Iniciando sesión..." : "Iniciar Sesión"}
+      </button>
+    </form>
+  )
+}
