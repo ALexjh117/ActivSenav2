@@ -87,7 +87,7 @@ export default function MenuLateralIn({ menuAbierto, toggleMenu, setContenidoAct
           <FaCalendarAlt className="iconodash" />
           Contactos
         </button>
-        <button onClick={() => setContenidoActual("chromagrid")} className="opciondash">
+        <button onClick={() => setContenidoActual("revisareventos")} className="opciondash">
           <FaCalendarAlt className="iconodash" />
           Aprobados
         </button>

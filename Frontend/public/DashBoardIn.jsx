@@ -14,18 +14,20 @@ import AprendizRun from "../src/pages/AprendizC/AprendizRun";
 import PlanificarEvento from "../src/pages/PlanificarEv/PlanificarEvento";
 import RegistroA from "../src/pages/RegistroAsistencia/RegistroA";
 import CartaContacto from "../src/pages/CartasContacto/CartaContacto";
-import ChromaGrid from "../src/Components/ChromaGrid/ChromaGrid";
 import ChatAI from "../src/pages/ChatAI/ChatAI";
 import UserViewIn from "../src/pages/UserView/UserViewIn";
 import ConfigViewIn from "../src/pages/ConfigView/ConfigViewIn";
 import Alquiler from "../src/pages/Alquiler/Alquiler";
 import AsistenciasActividad from "../src/pages/Asistencia/Instructor/AsistenciasActividad";
+import RevisionEventos from "../src/pages/RevisionEventos/RevisonEventos";
+
 // import UserView from "../src/pages/UserView/UserView"; // Descomenta si lo necesitas
 
 import "../src/styles/BotHp.css";
 import "../src/styles/ColaViento.css";
 import "../src/styles/Resposive.css";
 import "../src/styles/global.css";
+
 
 export default function DashBoard() {
   const [menuAbierto, setMenuAbierto] = useState(true);
@@ -69,7 +71,7 @@ export default function DashBoard() {
         {contenidoActual === "planevento" && <PlanificarEvento />}
         {contenidoActual === "registro" && <RegistroA />}
         {contenidoActual === "cartacontacto" && <CartaContacto />}
-        {contenidoActual === "chromagrid" && <ChromaGrid />}
+        {contenidoActual === "revisareventos" && <RevisionEventos />}
         {contenidoActual === "chatai" && <ChatAI />}
         {contenidoActual === "perfil" && <HomeDash />}
         {contenidoActual === "registroludicas" && <Registroludicas />}
